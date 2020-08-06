@@ -1,0 +1,30 @@
+= Data In Motion
+
+This repository contains examples, code snippets and helper scripts related to Data in Motion technologies. These are usually related to the following technologies, but not necessarily limited to this list:
+
+* Kafka & friends
+* NiFi & friends
+* Flink
+* Spark Streaming
+
+== Kafka
+
+[%autowidth,cols="2",options="header"]
+|===
+|Example|Purpose
+
+|link:kafka/spark-xkafka-wordcount[Cross-Kafka Kerberos authentication]
+|Small Spark Structured Streaming job showing how to use distinct Kerberos credentials to connect to two distinct Kafka clusters
+
+|===
+
+== NiFi Registry
+
+[%autowidth,cols="2",options="header"]
+|===
+|Example|Purpose
+
+|link:nifi-registry/flow-exp-imp[Flow import/export]
+|Script to export and import flows from/to NiFi Registry using the service's REST API
+
+|===

@@ -1,0 +1,65 @@
+= NiFi Registry export/import tool
+
+The script in this repo uses the NiFi Registry REST API ability to export and import flows. It can be used to transfer flows between multiple NiFi Registry services (e.g. Dev, Test, Prod).
+
+=== exp_flow.py
+
+Exports a flow from NiFi Registry and saves it in a directory. Multiple files are creating for storing different parts of the flow metadata. All these files are required to import the flow later.
+
+The script will prompt for the NiFi Registry credentials.
+
+The script takes 4 parameters:
+
+. The endpoint of the _source_ NiFi Registry (if using Cloudera CDP DataHub, simply _copy & paste_ the URL from the DataHub Endpoints page)
+. The UUID of the source bucket
+. The UUID of the source flow
+. Directory to save the flow (the directory will be created by the script and must not exist)
++
+[source,shell]
+----
+python exp_flow.py \
+  https://test-1.sb.a123.cloudera.site/test/cdp-proxy-api/nifi-registry-app/nifi-registry-api \
+  db2acb91-2f3d-4ef9-8984-cff2073336ed \
+  a139b5e0-0e5e-4835-ae68-9a40815cd038 \
+  flow_dir
+----
+
+=== imp_flow.py
+
+Import a flow previously exported by the `exp_flow.py` script into NiFi Registry.
+
+The script will prompt for the NiFi Registry credentials.
+
+The script takes 2 parameters:
+
+. The endpoint of the _target_ NiFi Registry (if using Cloudera CDP DataHub, simply _copy & paste_ the URL from the DataHub Endpoints page)
+. The directory into which the flow was previously exported
++
+[source,shell]
+----
+python imp_flow.py \
+  flow_dir \
+  https://prod-1.sb.a123.cloudera.site/prod/cdp-proxy-api/nifi-registry-app/nifi-registry-api
+----
+
+=== transfer_flow.py
+
+Transfer a flow between two NiFi Registry services. The machine where this script is executed must obviously have connectivity to the two NiFi Registries. If that's not possible, use the export and import scripts above and transfer the files across the two environments.
+
+The script will prompt for the NiFi Registry credentials.
+
+The script takes 4 parameters:
+
+. The endpoint of the _source_ NiFi Registry (if using Cloudera CDP DataHub, simply _copy & paste_ the URL from the DataHub Endpoints page)
+. The UUID of the source bucket
+. The UUID of the source flow
+. The endpoint of the _target_ NiFi Registry (if using Cloudera CDP DataHub, simply _copy & paste_ the URL from the DataHub Endpoints page)
++
+[source,shell]
+----
+python transfer_flow.py \
+  https://test-1.sb.a123.cloudera.site/test/cdp-proxy-api/nifi-registry-app/nifi-registry-api \
+  db2acb91-2f3d-4ef9-8984-cff2073336ed \
+  a139b5e0-0e5e-4835-ae68-9a40815cd038 \
+  https://prod-1.sb.a123.cloudera.site/prod/cdp-proxy-api/nifi-registry-app/nifi-registry-api
+----

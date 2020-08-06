@@ -1,0 +1,31 @@
+= Authenticating with multiple Kafka clusters
+
+The goal of this example is to show a simple Spark Structured Streaming job reading and writing data from/to two different Kafka clusters, using different Kerberos credentials to authenticate with each cluster.
+
+Each cluster is integrated with a different Kerberos realm and we don't assume that cross-realm trust exists across those two realms. Cross-realm trust would make the example simpler, since a single credentials could be used to connect to both clusters.
+
+The application is a simple word count example that reads messages from a Kafka topic, count the words in them and writes the results to a different topic, potentially on a distinct cluster.
+
+=== Building
+
+[source,shell]
+----
+mvn clean package
+----
+
+=== Running
+
+. Copy the repo to an edge node and build it as per above.
+. Edit the `client.properties` file and provide the connecting details for both clusters and specify the names of the input and output topics.
+. Submit the Spark Structured Streaming job with the following command:
++
+[source,shell]
+----
+spark-submit \
+  --class com.cloudera.examples.SparkCrossKafkaWordCount \
+  --files ./systest.keytab,./truststore.jks \
+  ./target/spark-xkafka-wordcount-1.0.jar \
+  ./client.properties
+----
+
+Since the truststore and keytab files may not be available across all the nodes for the job to use them, ensure they are loaded in the Distributed Cache using the `--files` option. In the `client.properties` file they can be then referenced as in the executor working directory, which is the Distributed Cache dir (e.g. `./truststore.jks`)
